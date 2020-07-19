@@ -1,0 +1,74 @@
+<!-- The Cicada Principle, revisited with CSS variable -->
+<!-- 
+    when using repeating elements (tiled backgrounds, different effects on multiple elements etc), 
+    using prime numbers for the size of the repeating unit maximizes the appearance of organic randomness. 
+    Note that this only works when the parameters you set are independent.
+    Here, there's a main rule using CSS variables, and the use :nth-of-*() rules to set these variables 
+    to something different every N items. If you use enough variables, and choose your Ns for them to be 
+    prime numbers, you reach a good appearance of pseudo-randomness with relatively small Ns.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        pre {
+            clip-path: polygon(var(--clip-top), var(--clip-bottom));
+            --clip-top: 0 0, 100% 2em;
+            --clip-bottom: 100% calc(100% - 1.5em), 0 100%;
+        }
+        
+        pre:nth-of-type(odd) {
+            --clip-top: 0 2em, 100% 0;
+        }
+        
+        pre:nth-of-type(3n + 1) {
+            --clip-bottom: 100% 100%, 0 calc(100% - 1.5em);
+        }
+
+        /* The following is just styling and is unrelated to the demo */
+        p {
+            max-width: 80ch;
+            margin: auto;
+        }
+
+        pre {
+            position: relative;
+            border: 0;
+            margin-left: 0;
+            margin-right: 0;
+            padding: 2em calc(50% - 40ch);
+            box-sizing: content-box;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script>
+        let n=0;
+        let hue=100;
+        while (n++ < 10) {
+            const div = `
+                <div>
+                    <p>
+                        This is a sample code snippet No. ${n}. And this is sample text between the code snippets No ${n}. 
+                        Bacon ipsum ${n} dolor amet porchetta strip steak beef kielbasa. Pork loin ${n} porchetta tongue brisket, 
+                        picanha filet mignon turkey capicola.
+                    </p>
+                    <pre style="background: hsl(${hue} 100% 95%);">
+                        <code> 
+                            function yolo${n}() {
+                                return foo${n}.bar();
+                            }
+                        </code>
+                    </pre>
+                </div>
+            `;
+            hue+=100;
+            document.querySelector('#container').insertAdjacentHTML( 'beforeend', div );
+        }
+    </script>
+</body>
+</html>
